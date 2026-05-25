@@ -1,98 +1,108 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [url, setUrl] = useState('')
-  const [shortUrl, setShortUrl] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [copied, setCopied] = useState(false)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setShortUrl('')
-    setCopied(false)
+  const [url, setUrl] = useState("");
+  const [expiry, setExpiry] = useState("");
 
-    if (!url.trim()) {
-      setError('Please enter a URL')
-      return
-    }
+  const [shortUrl, setShortUrl] = useState("");
+  const [error, setError] = useState("");
 
-    setLoading(true)
+  const handleShorten = async () => {
 
     try {
-      // TODO: Replace with your actual API endpoint
-      const response = await fetch('http://localhost:3000/api/shorten', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url: url }),
-      })
 
-      if (!response.ok) {
-        throw new Error('Failed to shorten URL')
-      }
+      setError("");
 
-      const data = await response.json()
-      setShortUrl(data.shortUrl)
+      const response = await fetch(
+        "http://localhost:8080/api/url/shorten",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            originalUrl: url,
+            expiryMinutes: parseInt(expiry),
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      setShortUrl(data.shortUrl);
+
     } catch (err) {
-      setError(err.message || 'Something went wrong')
-    } finally {
-      setLoading(false)
-    }
-  }
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shortUrl)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
-      setError('Failed to copy to clipboard')
+      setError("Backend not connected");
+
+      console.log(err);
     }
-  }
+  };
 
   return (
     <div className="container">
+
       <div className="card">
-        <h1 className="title">🔗 URL Shortener</h1>
-        <p className="subtitle">Shorten your long URLs into tiny links</p>
 
-        <form onSubmit={handleSubmit} className="form">
-          <div className="input-group">
-            <input
-              type="url"
-              placeholder="Enter your long URL here..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="input"
-            />
-            <button type="submit" className="btn" disabled={loading}>
-              {loading ? 'Shortening...' : 'Shorten'}
-            </button>
-          </div>
-        </form>
+        <h1>🔗 URL Shortener</h1>
 
-        {error && <p className="error">{error}</p>}
+        <p>Shorten your long URLs into tiny links</p>
 
-        {shortUrl && (
-          <div className="result">
-            <p className="result-label">Your shortened URL:</p>
-            <div className="result-box">
-              <a href={shortUrl} target="_blank" rel="noopener noreferrer" className="short-url">
+        <div className="inputs">
+
+          <input
+            type="text"
+            placeholder="Enter URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+
+          <input
+            type="number"
+            placeholder="Expiry Minutes"
+            value={expiry}
+            onChange={(e) => setExpiry(e.target.value)}
+          />
+
+        </div>
+
+        <button onClick={handleShorten}>
+          Shorten
+        </button>
+
+        {
+          shortUrl && (
+            <div className="result">
+
+              <h3>Short URL</h3>
+
+              <a
+                href={shortUrl}
+                target="_blank"
+              >
                 {shortUrl}
               </a>
-              <button onClick={copyToClipboard} className="copy-btn">
-                {copied ? '✓ Copied!' : 'Copy'}
-              </button>
+
             </div>
-          </div>
-        )}
+          )
+        }
+
+        {
+          error && (
+            <p className="error">
+              {error}
+            </p>
+          )
+        }
+
       </div>
+
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
