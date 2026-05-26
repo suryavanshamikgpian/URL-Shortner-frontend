@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .container {
@@ -8,76 +8,87 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background: linear-gradient(135deg,
-      #5f7cff,
-      #8d4de8);
+  background: linear-gradient(135deg, #5f7cff, #8d4de8);
 }
 
 .card {
-
   background: white;
-
   padding: 40px;
-
   border-radius: 20px;
-
-  width: 400px;
-
+  width: 440px;
   text-align: center;
-
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-.inputs {
-
+.card-top {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
 
+.welcome-text {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.logout-btn {
+  padding: 6px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto;
+  margin-top: 0;
+}
+
+.logout-btn:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #ef4444;
+}
+
+.inputs {
+  display: flex;
   gap: 10px;
-
   margin-top: 20px;
 }
 
 input {
-
   flex: 1;
-
   padding: 12px;
-
   border-radius: 10px;
-
   border: 1px solid #ccc;
 }
 
-button {
-
+.shorten-btn {
   margin-top: 20px;
-
   width: 100%;
-
   padding: 12px;
-
   border: none;
-
   border-radius: 10px;
-
   background: #6c63ff;
-
   color: white;
-
   font-size: 16px;
-
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shorten-btn:hover {
+  background: #5b54e8;
+  transform: translateY(-1px);
 }
 
 .result {
-
   margin-top: 20px;
 }
 
 .error {
-
   color: red;
-
   margin-top: 15px;
 }
